@@ -11,6 +11,7 @@ class EpochEvent(BaseModel):
 class Epoch(BaseModel):
   id: str
   title: str
+  short_title: str
   dates: str
   events: list[EpochEvent]
 

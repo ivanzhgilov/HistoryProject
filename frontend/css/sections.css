@@ -10,6 +10,12 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 22px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card:hover, .event-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.35);
 }
 .epoch-card { display: block; transition: transform 0.25s ease, box-shadow 0.25s ease; }
 .epoch-card:hover { transform: scale(1.04); box-shadow: 0 18px 36px rgba(0,0,0,0.35); }
@@ -20,6 +26,6 @@
 .epoch-card:hover .epoch-icon { color: var(--accent); background: rgba(201,160,61,0.12); }
 .event-year, .epoch-dates, .section-title { color: var(--accent); font-family: "Montserrat", Arial, sans-serif; }
 .events-list { display: grid; gap: 18px; }
-.page-nav { display: flex; gap: 12px; flex-wrap: wrap; }
+.page-nav { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 40px; }
 .site-footer { border-top: 1px solid var(--border-color); padding: 26px 0 38px; margin-top: 40px; }
 .site-footer p { margin: 0 0 8px; text-align: center; }

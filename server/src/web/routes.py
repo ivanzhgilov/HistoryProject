@@ -31,6 +31,11 @@ def legacy_pages_clean(page: str):
 def page_clean(page: str):
   if not _safe_page_name(page):
     return JSONResponse({"error": "Not Found"}, status_code=404)
+
+  # Special case for event details
+  if page.startswith("event-"):
+    return FileResponse(str(PAGES_DIR / "event.html"))
+
   file_path = PAGES_DIR / f"{page}.html"
   if not file_path.exists():
     return JSONResponse({"error": "Not Found"}, status_code=404)
