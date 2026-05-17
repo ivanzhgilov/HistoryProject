@@ -29,3 +29,43 @@
 .page-nav { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 40px; }
 .site-footer { border-top: 1px solid var(--border-color); padding: 26px 0 38px; margin-top: 40px; }
 .site-footer p { margin: 0 0 8px; text-align: center; }
+
+.section-images-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.section-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 50%;
+}
+
+.section-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  object-fit: cover;
+}
+
+.section-caption {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #aaa;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .section-figure {
+    max-width: 90%;
+  }
+}

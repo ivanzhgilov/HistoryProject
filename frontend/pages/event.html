@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подробности изобретения</title>
+    <title>{{ event.title }} - Эволюция техмысли</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap"
           rel="stylesheet">
-</head>
 </head>
 <body>
 <header class="site-header">
@@ -43,8 +42,8 @@
 
 <div class="breadcrumbs-wrap">
     <div class="container breadcrumbs">
-        <a href="/">Главная</a> → <a id="breadcrumb-epoch" href="#">Эпоха</a> → <span class="current"
-                                                                                      id="breadcrumb-event">Изобретение</span>
+        <a href="/">Главная</a> → <a href="/{{ epoch.id if epoch else '#' }}">{{ epoch.title if epoch else 'Эпоха'
+        }}</a> → <span class="current">{{ event.title }}</span>
     </div>
 </div>
 
@@ -52,28 +51,69 @@
     <section class="section">
         <div class="container reveal">
             <div class="event-detail-container">
-                <p class="event-year" id="event-year">Year</p>
-                <h1 id="event-title">Загрузка...</h1>
+                <p class="event-year">{{ event.year }}</p>
+                <h1>{{ event.title }}</h1>
 
                 <div class="event-info-grid">
-                    <div class="info-item">
-                        <strong>Изобретатель</strong>
-                        <span id="event-people">...</span>
+                    <div class="inventor-profile">
+                        {% if event.people_image %}
+                            <div class="inventor-image-wrap">
+                                <img src="/images/{{ event.people_image }}" class="inventor-img" alt="{{ event.people }}">
+                            </div>
+                        {% endif %}
+                        <div class="inventor-name-wrap">
+                            <span class="inventor-name">{{ event.people }}</span>
+                        </div>
                     </div>
                 </div>
 
-                <div id="event-gallery" class="event-gallery">
-                    <!-- Images will be injected here -->
+                <div class="event-gallery"
+                     style="{% if not event.images and not event.image %}display: none;{% endif %}">
+                    {% if event.images %}
+                    {% for img in event.images %}
+                    <img src="/images/{{ img }}" alt="{{ event.title }}">
+                    {% endfor %}
+                    {% elif event.image %}
+                    <img src="/images/{{ event.image }}" alt="{{ event.title }}">
+                    {% endif %}
                 </div>
 
-                <div id="event-sections" class="event-sections">
-                    <!-- Dynamic sections will be injected here -->
+                <div class="event-sections">
+                    {% if event.sections %}
+                        {% for section in event.sections %}
+                            <div class="dynamic-section">
+                                <h2>{{ section.title }}</h2>
+                                <p>{{ section.content|safe }}</p>
+                                {% if section.images %}
+                                    <div class="section-images-grid">
+                                        {% for img in section.images %}
+                                            <figure class="section-figure">
+                                                <img src="/images/{{ img.url }}" class="section-image" alt="{{ section.title }}">
+                                                {% if img.caption %}
+                                                    <figcaption class="section-caption">{{ img.caption }}</figcaption>
+                                                {% endif %}
+                                            </figure>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% elif event.description %}
+                        <div class="dynamic-section">
+                            <p>{{ event.description|safe }}</p>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="page-nav">
-                    <a class="btn btn-secondary" id="prev-event" href="#">← Предыдущее</a>
-                    <a class="btn btn-primary" id="back-button" href="#">Эпоха</a>
-                    <a class="btn btn-secondary" id="next-event" href="#">Следующее →</a>
+                    {% if event_index > 0 %}
+                    <a class="btn btn-secondary" href="/event-{{ epoch.id }}-{{ event_index - 1 }}">← Предыдущее</a>
+                    {% endif %}
+                    <a class="btn btn-primary" href="/{{ epoch.id if epoch else '#' }}">{{ epoch.title if epoch else
+                        'Эпоха' }}</a>
+                    {% if event_index < total_events - 1 %}
+                    <a class="btn btn-secondary" href="/event-{{ epoch.id }}-{{ event_index + 1 }}">Следующее →</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -87,118 +127,6 @@
     </div>
 </footer>
 
-<script>
-    async function loadEvent() {
-      const path = window.location.pathname;
-      const eventId = path.startsWith('/event-') ? path.substring(7) : path.replace(/^\//, '');
-
-      try {
-        // 1. Fetch Event Data
-        const eventResponse = await fetch(`/api/events/${eventId}`);
-        if (!eventResponse.ok) throw new Error('Event not found');
-        const data = await eventResponse.json();
-
-        // 2. Fetch Epoch Data to get the name and total events
-        const parts = eventId.split('-');
-        let epochName = 'Эпоха';
-        let epochId = '#';
-
-        if (parts.length >= 2) {
-          epochId = parts[0] + '-' + parts[1];
-          try {
-            const epochResponse = await fetch(`/api/epochs/${epochId}`);
-            if (epochResponse.ok) {
-              const epochData = await epochResponse.json();
-              epochName = epochData.short_title || epochData.title;
-              document.getElementById('back-button').textContent = `${epochName}`;
-
-              // Navigation between events
-              const eventIndex = parseInt(parts[2]);
-              const totalEvents = epochData.events ? epochData.events.length : 0;
-
-              const prevBtn = document.getElementById('prev-event');
-              const nextBtn = document.getElementById('next-event');
-
-              if (eventIndex > 0) {
-                prevBtn.href = `/event-${epochId}-${eventIndex - 1}`;
-                prevBtn.style.display = 'block';
-              } else {
-                prevBtn.style.display = 'none';
-              }
-
-              if (eventIndex < totalEvents - 1) {
-                nextBtn.href = `/event-${epochId}-${eventIndex + 1}`;
-                nextBtn.style.display = 'block';
-              } else {
-                nextBtn.style.display = 'none';
-              }
-            }
-          } catch (e) {
-            console.error('Error fetching epoch data:', e);
-          }
-        }
-
-        document.title = `${data.title} - Эволюция техмысли`;
-        document.getElementById('event-title').textContent = data.title;
-        document.getElementById('event-year').textContent = data.year;
-        document.getElementById('event-people').textContent = data.people;
-
-        // Gallery
-        const gallery = document.getElementById('event-gallery');
-        gallery.innerHTML = '';
-        if (data.images && Array.isArray(data.images)) {
-          data.images.forEach(imgName => {
-            const img = document.createElement('img');
-            img.src = `/images/${imgName}`;
-            img.alt = data.title;
-            gallery.appendChild(img);
-          });
-        } else if (data.image) {
-          const img = document.createElement('img');
-          img.src = `/images/${data.image}`;
-          img.alt = data.title;
-          gallery.appendChild(img);
-        }
-        if (gallery.children.length === 0) gallery.style.display = 'none';
-
-        // Dynamic Sections
-        const sectionsContainer = document.getElementById('event-sections');
-        sectionsContainer.innerHTML = '';
-        if (data.sections && Array.isArray(data.sections)) {
-          data.sections.forEach(section => {
-            const sectionDiv = document.createElement('div');
-            sectionDiv.className = 'dynamic-section';
-            const h2 = document.createElement('h2');
-            h2.textContent = section.title;
-            const p = document.createElement('p');
-            p.innerHTML = section.content;
-            sectionDiv.appendChild(h2);
-            sectionDiv.appendChild(p);
-            sectionsContainer.appendChild(sectionDiv);
-          });
-        } else if (data.description) {
-          const sectionDiv = document.createElement('div');
-          sectionDiv.className = 'dynamic-section';
-          const p = document.createElement('p');
-          p.innerHTML = data.description;
-          sectionDiv.appendChild(p);
-          sectionsContainer.appendChild(sectionDiv);
-        }
-
-        // Update Breadcrumbs and Back Button
-        document.getElementById('back-button').href = `/${epochId}`;
-        document.getElementById('breadcrumb-epoch').href = `/${epochId}`;
-        document.getElementById('breadcrumb-epoch').textContent = epochName;
-        document.getElementById('breadcrumb-event').textContent = data.title;
-
-      } catch (e) {
-        console.error('Error loading event:', e);
-        document.getElementById('event-title').textContent = 'Событие не найдено';
-      }
-    }
-
-    loadEvent();
-</script>
 <script type="module" src="/js/main.js"></script>
 </body>
 </html>

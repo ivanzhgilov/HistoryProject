@@ -1,6 +1,6 @@
 from src.core.paths import DATA_DIR
 from src.exceptions.errors import ResourceNotFoundError
-from src.schemas.epoch import Epoch, EpochListResponse, EpochSummary
+from src.schemas.epoch import Epoch, EpochListResponse, EpochSummary, EpochEvent
 from src.utils.json_loader import load_json
 
 
@@ -44,7 +44,7 @@ def get_epoch_by_id(epoch_id: str) -> Epoch:
   raise ResourceNotFoundError(resource="epoch", identifier=epoch_id)
 
 
-def get_event_by_id(event_id: str):
+def get_event_by_id(event_id: str) -> EpochEvent:
   """
   Finds an event by its composite ID (epoch_id-index).
   """
@@ -62,7 +62,7 @@ def get_event_by_id(event_id: str):
     if epoch.get("id") == epoch_id:
       events = epoch.get("events", [])
       if 0 <= event_index < len(events):
-        return events[event_index]
+        return EpochEvent(**events[event_index])
       break
 
   raise ResourceNotFoundError(resource="event", identifier=event_id)
