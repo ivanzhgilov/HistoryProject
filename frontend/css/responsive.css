@@ -12,6 +12,15 @@
   .reveal { opacity: 1; transform: none; }
 }
 
+@media (min-width: 768px) {
+  .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1025px) {
+  .desktop-nav { display: block; }
+  .burger { display: none; }
+  .mobile-menu, .mobile-menu-overlay { display: none !important; }
+  .cards-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 @media (max-width: 480px) {
   .page-nav {
     flex-direction: column;
@@ -21,4 +30,15 @@
     width: 100%;
     text-align: center;
   }
+  .section {
+    padding: 40px 15px;
+  }
+  .event-card {
+    padding: 15px;
+  }
 }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+

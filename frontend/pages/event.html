@@ -42,7 +42,7 @@
 
 <div class="breadcrumbs-wrap">
     <div class="container breadcrumbs">
-        <a href="/">Главная</a> → <a href="/{{ epoch.id if epoch else '#' }}">{{ epoch.title if epoch else 'Эпоха'
+        <a href="/">Главная</a> → <a href="/{{ epoch.id if epoch else '#' }}">{{ epoch.short_title if epoch else 'Эпоха'
         }}</a> → <span class="current">{{ event.title }}</span>
     </div>
 </div>
@@ -109,7 +109,7 @@
                     {% if event_index > 0 %}
                     <a class="btn btn-secondary" href="/event-{{ epoch.id }}-{{ event_index - 1 }}">← Предыдущее</a>
                     {% endif %}
-                    <a class="btn btn-primary" href="/{{ epoch.id if epoch else '#' }}">{{ epoch.title if epoch else
+                    <a class="btn btn-primary" href="/{{ epoch.id if epoch else '#' }}">{{ epoch.short_title if epoch else
                         'Эпоха' }}</a>
                     {% if event_index < total_events - 1 %}
                     <a class="btn btn-secondary" href="/event-{{ epoch.id }}-{{ event_index + 1 }}">Следующее →</a>

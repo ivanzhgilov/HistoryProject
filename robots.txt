@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://historyproject-euao.onrender.com/sitemap.xml

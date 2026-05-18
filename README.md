@@ -34,5 +34,5 @@
 ## URL-структура
 
 - `/` — главная
-- `/epoch-1`, `/epoch-2`, `/epoch-3`, `/epoch-4`, `/sources` — страницы эпох и источников
+- `/epoch-1`, `/epoch-2`, `/epoch-3`, `/epoch-4`, `/event` `/sources` — страницы эпох, событий и источников
 - `/api/health`, `/api/epochs`, `/api/epochs/{id}`, `/api/sources` — API

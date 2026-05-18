@@ -21,6 +21,9 @@ body {
   background: radial-gradient(circle at top right, #163b5a 0%, var(--bg-primary) 50%);
   color: var(--text-primary);
   line-height: 1.6;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 a { color: inherit; text-decoration: none; }

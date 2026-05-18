@@ -15,6 +15,21 @@ def _safe_page_name(name: str) -> bool:
   return bool(name) and all(ch.isalnum() or ch in ("-", "_") for ch in name)
 
 
+@web_router.get("/robots.txt")
+def robots():
+  return FileResponse(str(ROOT_DIR / "robots.txt"))
+
+
+@web_router.get("/favicon.ico")
+def favicon():
+  return FileResponse(str(FRONTEND_DIR / "images" / "favicon.ico"))
+
+
+@web_router.get("/sitemap.xml")
+def sitemap():
+  return FileResponse(str(ROOT_DIR / "sitemap.xml"))
+
+
 @web_router.get("/")
 def home():
   return FileResponse(str(FRONTEND_DIR / "index.html"))

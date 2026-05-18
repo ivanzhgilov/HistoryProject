@@ -25,7 +25,7 @@
 }
 .epoch-card:hover .epoch-icon { color: var(--accent); background: rgba(201,160,61,0.12); }
 .event-year, .epoch-dates, .section-title { color: var(--accent); font-family: "Montserrat", Arial, sans-serif; }
-.events-list { display: grid; gap: 18px; }
+.events-list { display: grid; gap: 18px; grid-template-columns: 1fr; }
 .page-nav { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 40px; }
 .site-footer { border-top: 1px solid var(--border-color); padding: 26px 0 38px; margin-top: 40px; }
 .site-footer p { margin: 0 0 8px; text-align: center; }
